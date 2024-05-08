@@ -1,0 +1,42 @@
+body {
+    background: linear-gradient(to right, #65B891, #4E878C);
+    color: #00241B;
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    color: #d4d4d4; /* Color para el encabezado */
+    text-align: center;
+}
+
+form {
+    margin: 20px;
+    padding: 20px;
+    background-color: #00241B;
+    border-radius: 20px;
+}
+
+label {
+    color: #f6f6f6; /* Color para las etiquetas */
+    display: block;
+    margin-bottom: 10px; /* Ajusta el espacio inferior de las etiquetas */
+}
+
+input {
+    padding: 5px;
+    margin: 5px;
+    border: 1px solid #B5FFE1;
+}
+
+button {
+    padding: 15px 30px;
+    background-color: #f0f0f0;
+    border-radius: 15px;
+    cursor: pointer;
+    display: block;
+    margin-top: 10px; /* Ajusta el espacio superior del botón */
+}
+
+button:hover {
+    background-color: #4E878C;
+}
