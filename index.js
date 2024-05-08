@@ -107,27 +107,43 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// Ruta única para renderizar la página main.ejs
-app.get('/main', (req, res) => {
-    res.render('main'); // Asegúrate de que 'main.ejs' esté en tu carpeta de vistas
+// Ruta para renderizar la página main.ejs con los registros
+app.get('/main', async (req, res) => {
+    try {
+        const registros = await Registro.find();
+        res.render('main', { registros }); // Pasar registros como un objeto a la vista main.ejs
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error en el servidor: ' + error.message);
+    }
+});
+
+// Ruta para obtener todos los registros en formato JSON
+app.get('/todos', async (req, res) => {
+    try {
+        const registros = await Registro.find();
+        res.json(registros);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error en el servidor: ' + error.message);
+    }
 });
 
 app.post('/eliminar', async (req, res) => {
     const { cedula } = req.body;
 
     try {
-        // Buscar el registro por cédula y eliminarlo
         const resultado = await Registro.deleteOne({ cedula });
 
         if (resultado.deletedCount > 0) {
-            // Registro eliminado con éxito
-            res.send('Registro eliminado con éxito');
+            res.status(200).send({ message: 'Registro eliminado con éxito' });
         } else {
-            // No se encontró el registro con la cédula proporcionada
-            res.status(404).send('No se encontró el registro con la cédula proporcionada');
+            res.status(404).send({ success: false, message: 'No se encontró el registro con la cédula proporcionada' });
         }
     } catch (error) {
         console.error(error);
-        res.status(500).send('Error en el servidor: ' + error.message);
+        res.status(500).send({ success: false, message: 'Error en el servidor: ' + error.message });
     }
 });
+
+

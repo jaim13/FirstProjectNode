@@ -3,40 +3,113 @@ body {
     color: #00241B;
     font-family: Arial, sans-serif;
 }
+.Registro .card {
+    max-width: 400px;
+    margin: 10px auto;
+    padding: 20px;
+    background-color: #e3eae8;
+    border-radius: 40px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
+.Registro .card form {
+    display: grid;
+    gap: 10px;
+}
+
+.Registro .card form label {
+    font-weight: bold;
+}
+
+.Registro .card form input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
 h1 {
-    color: #d4d4d4; /* Color para el encabezado */
+    color: #0c0c0c; 
     text-align: center;
 }
 
-form {
-    margin: 20px;
-    padding: 20px;
-    background-color: #00241B;
-    border-radius: 20px;
-}
-
 label {
-    color: #f6f6f6; /* Color para las etiquetas */
+    color: #000000;
     display: block;
-    margin-bottom: 10px; /* Ajusta el espacio inferior de las etiquetas */
+    margin-bottom: 10px; 
 }
 
 input {
     padding: 5px;
     margin: 5px;
-    border: 1px solid #B5FFE1;
-}
-
-button {
-    padding: 15px 30px;
-    background-color: #f0f0f0;
+    border: 1px solid #bbbcbb;
     border-radius: 15px;
-    cursor: pointer;
-    display: block;
-    margin-top: 10px; /* Ajusta el espacio superior del botón */
 }
 
-button:hover {
-    background-color: #4E878C;
+.Registro .label {
+    color: #000000;
+    display: block;
+    margin-bottom: 10px; 
+}
+
+.Registro .input {
+    padding: 5px;
+    margin: 5px;
+    border: 1px solid #bbbcbb;
+    border-radius: 15px;
+}
+.Registro .button-37 {
+  background-color: #13aa52;
+  border: 1px solid #13aa52;
+  display: block;
+  margin: 0 auto;
+  margin-top: 10px;
+  width: 50%;
+  max-width: 200px;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, .1) 0 2px 4px 0;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  font-family: "Akzidenz Grotesk BQ Medium", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  outline: none;
+  outline: 0;
+  padding: 10px 25px;
+  text-align: center;
+  transform: translateY(0);
+  transition: transform 150ms, box-shadow 150ms;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.Registro .button-37:hover {
+  box-shadow: rgba(0, 0, 0, .15) 0 3px 9px 0;
+  transform: translateY(-2px);
+}
+
+@media (min-width: 768px) {
+  .Registro .button-37 {
+    padding: 10px 30px;
+  }
+}
+
+#mensaje {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    display: none;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
 }

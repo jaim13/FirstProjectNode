@@ -6,14 +6,98 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Examen</title>
     <link rel="stylesheet" type="text/css" href="/styles.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <h1>Eliminar Usuario</h1>
-    <form action="/eliminar" method="post"> 
-        <label for="cedula">Cédula:</label>
-        <input type="text" id="ceduladelete" name="cedula">
-        <br>
-        <button type="submit">Eliminar</button>
-    </form>
+    <div class="container mt-4">
+        <div class="card p-4 custom-card">
+            <h1 class="mb-4">Eliminar Usuario</h1>
+            <form action="/eliminar" method="post">
+                <div class="form-group">
+                    <label for="ceduladelete">Cédula:</label>
+                    <input type="text" class="form-control" id="ceduladelete" name="cedula">
+                </div>
+                <button type="submit" class="btn btn-danger">Eliminar</button>
+            </form>
+        </div>
+        <div id="mensaje" style="display: none;"></div>
+    </div>
+    <div class="card mt-4">
+        <div class="card-body">
+            <h2 class="card-title">Registros</h2>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nombres</th>
+                            <th>Apellidos</th>
+                            <th>Cédula</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% registros.forEach(registro => { %>
+                            <tr>
+                                <td><%= registro.nombre %></td>
+                                <td><%= registro.apellidos %></td>
+                                <td><%= registro.cedula %></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="alerta" class="alert alert-dismissible fade show" role="alert" style="display: none;">
+    <strong id="alerta-mensaje"></strong>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function eliminarRegistro() {
+    $.ajax({
+        url: '/eliminar',
+        method: 'POST',
+        success: function(response) {
+            console.log('Respuesta del servidor:', response); // Verificar la respuesta del servidor
+            if (response.message) {
+                console.log('Registro eliminado con éxito:', response.message); // Verificar el mensaje de éxito
+                mostrarAlerta('alert-success', response.message);
+                // Actualizar la página después de eliminar el registro
+                setTimeout(function() {
+                    window.location.reload();
+                }, 2000); // Recargar la página después de 2 segundos
+            } else {
+                console.log('Error al eliminar el registro'); // Mensaje de error genérico
+                // Mostrar la alerta de error de Bootstrap
+                mostrarAlerta('alert-danger', 'Error al eliminar el registro');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error en la solicitud:', error);
+            mostrarAlerta('alert-danger', 'Error en la solicitud: ' + xhr.statusText);
+        }
+    });
+}
+
+
+
+    // Función para mostrar una alerta de Bootstrap
+    function mostrarAlerta(clase, mensaje) {
+        $('#alerta').removeClass().addClass('alert ' + clase).fadeIn();
+        $('#alerta-mensaje').text(mensaje);
+        setTimeout(function() {
+            $('#alerta').fadeOut();
+        }, 5000); // Ocultar la alerta después de 5 segundos
+    }
+</script>
+
 </body>
 </html>
