@@ -126,7 +126,7 @@
 
         $('#editForm').on('submit', function(event) {
             event.preventDefault();
-            var cedula = rowData[2]; // Usar rowData[2] como la cédula original
+            var cedula = rowData[2]; 
             var nuevosDatos = {
                 nombre: $('#editNombre').val(),
                 apellidos: $('#editApellidos').val(),
@@ -154,7 +154,6 @@
             $('#editModal').modal('hide');
         });
 
-        // Obtener todos los registros al cargar la página
         $.get('/todos', function(registros) {
             // Limpiar la tabla antes de agregar nuevos registros
             $('#registros-table tbody').empty();
