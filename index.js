@@ -1,11 +1,19 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import cors from 'cors';
 
 const app = express();
 const PORT = 8024;
 
+
+app.use(cors({
+    origin: '*' 
+}));
+
 app.set('views', 'vistas');
 app.set('view engine', 'ejs');
+
+app.use(express.json());
 
 app.use(express.static('estilos'));
 app.use(express.urlencoded({ extended: true }));
@@ -57,6 +65,17 @@ app.listen(PORT, () => {
 app.get('/', (req, res) => {
     res.render('index');
 });
+// Ruta para renderizar la plantilla 'change' y pasar los registros como datos
+app.get('/change', async (req, res) => {
+    try {
+        const registros = await Registro.find();
+        res.render('change', { registros: registros });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error en el servidor: ' + error.message);
+    }
+});
+
 
 app.post('/agregar', (req, res) => {
     const registro = new Registro({
@@ -147,3 +166,23 @@ app.post('/eliminar', async (req, res) => {
 });
 
 
+app.post('/actualizar', async (req, res) => {
+    const { cedula, nuevosDatos } = req.body;
+    console.log('Datos recibidos:', req.body);
+
+    try {
+        // Buscar el registro por su cédula y actualizar los campos con los nuevos datos
+        const resultado = await Registro.findOneAndUpdate({ cedula }, nuevosDatos, { new: true });
+
+        if (resultado) {
+            res.status(200).send({ success: true, message: 'Registro actualizado correctamente', registro: resultado });
+            console.log('Registro actualizado');
+        } else {
+            res.status(404).send({ success: false, message: 'No se encontró el registro con la cédula proporcionada' });
+            console.log('Error al actualizar');
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ success: false, message: 'Error en el servidor: ' + error.message });
+    }
+});

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Managment</title>
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">Managment</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link active custom" aria-current="page" href="#">Delete Users</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active" href="#">Change Users</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+    </header>
+    <div class="card mt-4">
+        <div class="card-body">
+            <h2 class="card-title">Registros</h2>
+            <div class="table-responsive">
+                <table id="registros-table" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nombres</th>
+                            <th>Apellidos</th>
+                            <th>Cédula</th>
+                            <th>Telefono</th>
+                            <th>Provincia</th>
+                            <th>Password</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% registros.forEach(registro => { %>
+                            <tr>
+                                <td><%= registro.nombre %></td>
+                                <td><%= registro.apellidos %></td>
+                                <td><%= registro.cedula %></td>
+                                <td><%= registro.telefono %></td>
+                                <td><%= registro.provincia %></td>
+                                <td><%= registro.password %></td>
+                                <td><button class="btn btn-primary edit-btn">Editar</button></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Editar Registro</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Formulario para editar registro -->
+                    <form id="editForm">
+                        <!-- Aquí van los campos de edición -->
+                    </form>
+                </div>                
+            </div>
+        </div>
+    </div>
+    
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var rowData; // Definir rowData fuera del alcance de las funciones
+
+        // Delegado de eventos para el botón de editar
+        $(document).on('click', '.edit-btn', function() {
+            rowData = $(this).closest('tr').find('td').map(function() {
+                return $(this).text();
+            }).get();
+
+            $('#editForm').html(`
+                <div class="mb-3">
+                    <label for="editNombre" class="form-label">Nombres</label>
+                    <input type="text" class="form-control" id="editNombre" value="${rowData[0]}">
+                </div>
+                <div class="mb-3">
+                    <label for="editApellidos" class="form-label">Apellidos</label>
+                    <input type="text" class="form-control" id="editApellidos" value="${rowData[1]}">
+                </div>
+                <div class="mb-3">
+                    <label for="editCedula" class="form-label">Cédula</label>
+                    <input type="text" class="form-control" id="editCedula" value="${rowData[2]}" disabled>
+                </div>
+                <div class="mb-3">
+                    <label for="editTelefono" class="form-label">Telefono</label>
+                    <input type="text" class="form-control" id="editTelefono" value="${rowData[3]}">
+                </div>
+                <div class="mb-3">
+                    <label for="editProvincia" class="form-label">Provincia</label>
+                    <input type="text" class="form-control" id="editProvincia" value="${rowData[4]}">
+                </div>
+                <div class="mb-3">
+                    <label for="editPassword" class="form-label">Password</label>
+                    <input type="text" class="form-control" id="editPassword" value="${rowData[5]}">
+                </div>
+                <!-- Botón "Guardar Cambios" dentro del formulario -->
+                <button type="submit" class="btn btn-primary float-end">Guardar Cambios</button>
+            `);
+
+            $('#editModal').modal('show');
+        });
+
+        $('#editForm').on('submit', function(event) {
+            event.preventDefault();
+            var cedula = rowData[2]; // Usar rowData[2] como la cédula original
+            var nuevosDatos = {
+                nombre: $('#editNombre').val(),
+                apellidos: $('#editApellidos').val(),
+                telefono: $('#editTelefono').val(),
+                provincia: $('#editProvincia').val(),
+                password: $('#editPassword').val()
+            };
+
+            $.ajax({
+                url: '/actualizar',
+                type: 'POST',
+                data: JSON.stringify({ cedula, nuevosDatos }),
+                contentType: 'application/json; charset=utf-8',
+                success: function(response) {
+                    console.log('Datos enviados desde el cliente:', { cedula, nuevosDatos, rowData });
+                    console.log('Registro actualizado:', response.registro);
+                    location.reload();
+                },
+                error: function(error) {
+                    console.log('Datos enviados desde el cliente:', { cedula, nuevosDatos, rowData });
+                    console.error('Error al actualizar el registro:', error);
+                }
+            });
+
+            $('#editModal').modal('hide');
+        });
+
+        // Obtener todos los registros al cargar la página
+        $.get('/todos', function(registros) {
+            // Limpiar la tabla antes de agregar nuevos registros
+            $('#registros-table tbody').empty();
+
+            registros.forEach(function(registro) {
+                var row = '<tr>' +
+                    '<td>' + registro.nombre + '</td>' +
+                    '<td>' + registro.apellidos + '</td>' +
+                    '<td>' + registro.cedula + '</td>' +
+                    '<td>' + registro.telefono + '</td>' +
+                    '<td>' + registro.provincia + '</td>' +
+                    '<td>' + registro.password + '</td>' +
+                    '<td><button class="btn btn-primary edit-btn">Editar</button></td>' +
+                    '</tr>';
+
+                $('#registros-table tbody').append(row);
+            });
+        });
+    });
+</script>
+
+    
+    
+</body>
+</html>
